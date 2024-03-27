@@ -21,7 +21,7 @@ def parser(text: str):
     index = 0
     color_indeces = []
     for character in text:
-        if character == '[':
+        if character == '(':
             color_indeces.append(index)
             index = (index + 1)%7
     return color_indeces
@@ -38,23 +38,24 @@ def displayer(canvas: tk.Canvas,
         if character == '(':
             color = colors[color_indeces.pop(0)]
             color_stack.append(color)
-            canvas.create_text(10 + number_of_chars*30, 10, text=character, fill=color)
-            number_of_chars += 1
+            canvas.create_text(10 + number_of_chars*10, 10, text=character, fill=color)
         if character == ")":
             try:
-                canvas.create_text(10 + number_of_chars*30, 10, text=character, fill=color_stack.pop())
+                canvas.create_text(10 + number_of_chars*10, 10, text=character, fill=color_stack.pop())
             except IndexError:
                 canvas.delete("all")
                 canvas.create_text(10, 10, text="WRONG!!")
                 return
         else:
-            canvas.create_text(10 + number_of_chars*30, 10, text=character)
+            canvas.create_text(10 + number_of_chars*10, 10, text=character)
+        number_of_chars += 1
             
 
 def main(canvas: tk.Canvas) -> None:
     global COLORS
-    text = input("Give a prompt")
+    text = input("Write text: ")
     color_indeces = parser(text)
+    print(color_indeces)
     displayer(canvas, text, COLORS, color_indeces)
 
 
@@ -62,10 +63,12 @@ COLORS = ["red", "green", "blue", "yellow", "orange", "purple", "black", "white"
 
 root = tk.Tk()
 root.title("Color Print")
-root.geometry("200x500")
+root.geometry("500x50")
 
-canvas = tk.Canvas(root, width=200, height=500)
+canvas = tk.Canvas(root, width=500, height=50)
 canvas.pack()
 
+main(canvas)
 
+root.mainloop()
 
